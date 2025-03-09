@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center">
+  <h1 class="text-4xl font-bold">Welcome to the Online Doctor Appointment System</h1>
+  <p class="mt-4">Book appointments, consult with doctors, and request direct video calls.</p>
+  
+  {% if session.get('user_id') %}
+    <div class="mt-6">
+      {% if session.get('user_type') == 'patient' %}
+        <a href="{{ url_for('direct_call_request_to_doctor') }}" class="bg-blue-500 text-white p-3 rounded shadow">
+          Request Direct Video Call with a Doctor
+        </a>
+      {% elif session.get('user_type') == 'doctor' %}
+        <a href="{{ url_for('direct_call_request_to_patient') }}" class="bg-blue-500 text-white p-3 rounded shadow">
+          Request Direct Video Call with a Patient
+        </a>
+      {% endif %}
+    </div>
+    <div class="mt-4">
+      <a href="{{ url_for('direct_calls') }}" class="bg-green-500 text-white p-3 rounded shadow">
+        View Direct Call Requests
+      </a>
+    </div>
+  {% else %}
+    <div class="mt-6">
+      <p>
+        Please <a href="{{ url_for('login') }}" class="text-blue-500 underline">login</a> or register to access direct video call features.
+      </p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

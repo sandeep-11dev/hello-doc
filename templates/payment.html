@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Payment for Online Consultation</h2>
+<p>Please complete the payment to proceed with your online consultation booking.</p>
+<form action="{{ url_for('payment', doctor_id=doctor_id) }}" method="post" class="mt-4">
+  <input type="text" name="card_number" placeholder="Card Number" class="border p-2 w-full" required>
+  <input type="text" name="expiry" placeholder="Expiry Date (MM/YY)" class="border p-2 w-full mt-2" required>
+  <input type="text" name="cvv" placeholder="CVV" class="border p-2 w-full mt-2" required>
+  <button type="submit" class="bg-green-500 text-white p-2 mt-4">Pay Now</button>
+</form>
+{% endblock %}

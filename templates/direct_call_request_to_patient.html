@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2 class="text-2xl font-bold mb-4">Request Direct Video Call to Patient</h2>
+  <form action="{{ url_for('direct_call_request_to_patient') }}" method="post" class="space-y-4">
+    <label for="patient_id" class="block">Select Patient:</label>
+    <select name="patient_id" id="patient_id" class="border p-2 w-full" required>
+      {% for patient in patients %}
+        <option value="{{ patient.id }}">{{ patient.name }} - {{ patient.email }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="bg-blue-500 text-white p-2">Send Request</button>
+  </form>
+{% endblock %}

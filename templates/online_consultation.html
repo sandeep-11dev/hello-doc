@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Online Consultation Room</h2>
+<p>Appointment ID: {{ appointment.id }}</p>
+<div id="video-chat" class="border p-4 bg-white">
+  <!-- Placeholder for video call integration -->
+  <p>Video call interface goes here.</p>
+</div>
+<script>
+  var socket = io();
+  var room = "appointment_{{ appointment.id }}";
+  socket.emit('join', {username: 'User', room: room});
+  socket.on('message', function(data){
+    console.log(data.msg);
+  });
+  // Add actual video streaming integration as needed.
+</script>
+{% endblock %}

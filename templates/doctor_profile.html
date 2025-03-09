@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">{{ doctor.name }}'s Profile</h2>
+<p><strong>Specialty:</strong> {{ doctor.specialty }}</p>
+<p><strong>Portfolio:</strong></p>
+<p>{{ doctor.portfolio }}</p>
+<p><strong>Average Rating:</strong> {{ doctor.rating | round(1) }} / 5 (based on {{ doctor.num_ratings }} ratings)</p>
+{% if session.get('user_type') == 'patient' %}
+  <a href="{{ url_for('rate', doctor_id=doctor.id) }}" class="bg-blue-500 text-white p-2 inline-block mt-4">Rate this Doctor</a>
+{% endif %}
+<hr class="my-4">
+<h3 class="text-xl font-bold">Ratings & Reviews</h3>
+<ul>
+  {% for rate in ratings %}
+  <li class="border p-2 my-2">
+    <p><strong>Rating:</strong> {{ rate.rating }} / 5</p>
+    <p>{{ rate.comment }}</p>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

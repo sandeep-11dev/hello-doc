@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Community Discussion</h2>
+<form action="{{ url_for('community') }}" method="post" class="mb-4">
+  <textarea name="content" placeholder="Share your thoughts..." class="border p-2 w-full" required></textarea>
+  <button type="submit" class="bg-blue-500 text-white p-2 mt-2">Post</button>
+</form>
+<ul class="space-y-4">
+  {% for post in posts %}
+  <li class="p-4 bg-white rounded shadow">
+    <p><strong>{{ post.user_type.capitalize() }} (ID: {{ post.user_id }}):</strong> {{ post.content }}</p>
+    <small>{{ post.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

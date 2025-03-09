@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Book Appointment with Dr. {{ doctor.name }}</h2>
+<form action="{{ url_for('appointment', doctor_id=doctor.id) }}" method="post" class="space-y-4">
+  <label class="block">
+    <span>Appointment Type:</span>
+    <select name="appointment_type" class="border p-2 w-full" required>
+      <option value="online">Online Consultation</option>
+      <option value="offline">Offline Appointment</option>
+    </select>
+  </label>
+  <label class="block">
+    <span>Scheduled Time:</span>
+    <input type="datetime-local" name="scheduled_time" class="border p-2 w-full" required>
+  </label>
+  <!-- Hidden field for payment status -->
+  <input type="hidden" name="paid" value="false">
+  <button type="submit" class="bg-blue-500 text-white p-2">Book Appointment</button>
+</form>
+{% endblock %}

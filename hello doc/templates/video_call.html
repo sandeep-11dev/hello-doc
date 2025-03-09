@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Call Room</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/simple-peer@9.11.0/simple-peer.min.js"></script>
+  <style>
+    video {
+      width: 45%;
+      margin: 2%;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 p-4">
+  <h2 class="text-2xl font-bold mb-4">Video Call Room</h2>
+  <p class="mb-4">Room: {{ room }}</p>
+  <div class="flex justify-center">
+    <video id="localVideo" autoplay muted></video>
+    <video id="remoteVideo" autoplay></video>
+  </div>
+  <script>
+    // Get room name from the passed variable
+    const room = "{{ room }}";
+    const socket = io();
+    
+    socket.emit('join', { room: room, username: "User" });
+
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+      const localVideo = document.getElementById('localVideo');
+      localVideo.srcObject = stream;
+
+      // For demo purposes, decide initiator based on URL hash: add "#init" to become initiator.
+      let initiator = (location.hash === '#init');
+
+      const peer = new SimplePeer({
+        initiator: initiator,
+        trickle: false,
+        stream: stream
+      });
+
+      peer.on('signal', data => {
+        socket.emit('message', { room: room, signal: data });
+      });
+
+      socket.on('message', data => {
+        if (data.signal) {
+          peer.signal(data.signal);
+        }
+      });
+
+      peer.on('stream', remoteStream => {
+        const remoteVideo = document.getElementById('remoteVideo');
+        remoteVideo.srcObject = remoteStream;
+      });
+    }).catch(err => {
+      console.error('Error accessing media devices.', err);
+    });
+  </script>
+</body>
+</html>

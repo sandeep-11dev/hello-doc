@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2 class="text-2xl font-bold mb-4">My Video Calls</h2>
+  {% if calls %}
+    <ul class="space-y-4">
+      {% for call in calls %}
+        <li class="p-4 bg-white rounded shadow">
+          <p><strong>Appointment ID:</strong> {{ call.id }}</p>
+          {% if session.get('user_type') == 'patient' %}
+            <p><strong>Doctor ID:</strong> {{ call.doctor_id }}</p>
+          {% elif session.get('user_type') == 'doctor' %}
+            <p><strong>Patient ID:</strong> {{ call.user_id }}</p>
+          {% endif %}
+          <p><strong>Scheduled Time:</strong> {{ call.scheduled_time.strftime('%Y-%m-%d %H:%M') }}</p>
+          <a href="{{ url_for('video_call', appointment_id=call.id) }}" class="text-blue-500 underline">Join Video Call</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No active video calls found.</p>
+  {% endif %}
+{% endblock %}

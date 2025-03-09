@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Doctor Dashboard</h2>
+
+<div class="bg-white p-4 rounded shadow mb-4">
+  <h3 class="text-xl">Welcome, Dr. {{ doctor.name }}</h3>
+  <p><strong>Specialty:</strong> {{ doctor.specialty }}</p>
+  <p><strong>Portfolio:</strong> {{ doctor.portfolio }}</p>
+  <p><strong>Average Rating:</strong> {{ doctor.rating | round(1) }} / 5 (based on {{ doctor.num_ratings }} ratings)</p>
+</div>
+
+<h3 class="text-xl mb-2">Appointment Requests</h3>
+<ul class="space-y-2">
+  {% for app in appointments %}
+  <li class="p-4 bg-white rounded shadow">
+    <p><strong>Patient ID:</strong> {{ app.user_id }}</p>
+    <p><strong>Type:</strong> {{ app.appointment_type }}</p>
+    <p><strong>Scheduled:</strong> {{ app.scheduled_time.strftime('%Y-%m-%d %H:%M') }}</p>
+    <p><strong>Status:</strong> {{ app.status }}</p>
+    {% if app.status == 'pending' %}
+      <form action="{{ url_for('accept_appointment', appointment_id=app.id) }}" method="post" class="inline">
+        <button type="submit" class="bg-green-500 text-white p-2">Accept</button>
+      </form>
+      <form action="{{ url_for('reject_appointment', appointment_id=app.id) }}" method="post" class="inline ml-2">
+        <button type="submit" class="bg-red-500 text-white p-2">Reject</button>
+      </form>
+    {% elif app.status == 'accepted' and app.appointment_type == 'online' %}
+      {% if app.video_call_status == 'none' %}
+        <form action="{{ url_for('request_videocall', appointment_id=app.id) }}" method="post" class="inline">
+          <button type="submit" class="bg-blue-500 text-white p-2">Request Video Call</button>
+        </form>
+      {% elif app.video_call_status == 'requested' %}
+        <p>Waiting for patient to accept video call.</p>
+      {% elif app.video_call_status == 'accepted' %}
+        <a href="{{ url_for('video_call', appointment_id=app.id) }}" class="text-blue-500">Join Video Call</a>
+      {% endif %}
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

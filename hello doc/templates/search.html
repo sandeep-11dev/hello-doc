@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Search Results for "{{ query }}"</h2>
+{% if results %}
+<ul class="space-y-2">
+  {% for doctor in results %}
+  <li class="p-4 bg-white rounded shadow">
+    <h4 class="text-lg font-bold">{{ doctor.name }}</h4>
+    <p>Specialty: {{ doctor.specialty }}</p>
+    <a href="{{ url_for('doctor_profile', doctor_id=doctor.id) }}" class="text-blue-500">View Profile</a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No doctors found matching your search.</p>
+{% endif %}
+{% endblock %}

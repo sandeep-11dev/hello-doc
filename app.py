@@ -502,4 +502,5 @@ if __name__ == '__main__':
     if not os.path.exists('doctor_appointment.db'):
         with app.app_context():
             db.create_all()
-    socketio.run(app, debug=True)
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True, allow_unsafe_werkzeug=True)
+
